@@ -1,66 +1,8 @@
-// Generar un array de productos en formato JSON
-function generarProductos() {
-    return [
-        {
-            "id": 1,
-            "name": "Top Crop Bloom Fertilizante Floración 250ml",
-            "description": "Top Bloom de Top Crop es un fertilizante de floración capaz de sorprenderte con cosechas voluminosas y una explosión de grandes cogollos repletos de resina y de sabor. Top Bloom es rico en fósforo y potasio, macronutrientes necesarios para el desarrollo de grandes racimos florales.",
-            "amount": 16402,
-            "offer": 10,
-            "images": [
-                "https://http2.mlstatic.com/D_NQ_NP_924209-MLU75592046705_042024-O.webp",
-                "https://http2.mlstatic.com/D_NQ_NP_628153-MLU72597795659_102023-O.webp",
-                "https://http2.mlstatic.com/D_NQ_NP_963057-MLU75455028027_032024-O.webp"
-            ]
-        },
-        {
-            "id": 2,
-            "name": "Papel Para Armar Raw Black Connoisseur Tips 1/14 Sedas",
-            "description": "Producto: Sedas Raw Black connoisseur 1/14 + filtros tips. Especificaciones: Peso: 0.12 kg. Medidas: 8 cm × 2.5 cm × 1 cm. 50 papeles y 50 tips. Incluye filtros tips y sedas. Tamaño (standard) 1 1/4.",
-            "amount": 4500,
-            "offer": 5,
-            "images": [
-                "https://http2.mlstatic.com/D_NQ_NP_816530-MLA52925908152_122022-O.webp"
-            ]
-        },
-        {
-            "id": 3,
-            "name": "Growtech Led Cultivo Indoor 200w Panel Full Spectrum",
-            "description": "Genera menos temperatura/calor, sólido y fuerte, seguridad en conexiones, ahorro de espacio y energía. Recomendado para sistemas de cultivo tipo 'Scrog', 'SOG' o 'supper cropping'.",
-            "amount": 161174.7,
-            "offer": 0,
-            "images": [
-                "https://http2.mlstatic.com/D_NQ_NP_773993-MLU78441734014_082024-O.webp",
-                "https://http2.mlstatic.com/D_NQ_NP_934988-MLU78441907728_082024-O.webp",
-                "https://http2.mlstatic.com/D_NQ_NP_879511-MLA74370081567_022024-O.webp"
-            ]
-        },
-        {
-            "id": 4,
-            "name": "Growtech Led Cultivo Indoor 600w Panel Full Spectrum",
-            "description": "Potencia de 600W reales, cobertura hasta 120x120cm, espectro 380-840nm. Recomendado para etapas de vegetación y floración con distancias óptimas a las plantas.",
-            "amount": 481386,
-            "offer": 5,
-            "images": ["https://http2.mlstatic.com/D_NQ_NP_870737-MLU74245243600_022024-O.webp",
-                "https://http2.mlstatic.com/D_NQ_NP_864061-MLU74245223844_022024-O.webp",
-                "https://http2.mlstatic.com/D_NQ_NP_848184-MLU74245302950_022024-O.webp"
+// Declarar productos como una variable global
+let productos = []; 
 
-            ]
-        },
-        {
-            "id": 5,
-            "name": "Carpa De Cultivos Indoor 100x100x200cm Bella Vita Lite Tela Mylar",
-            "description": "Carpa ideal para cultivos en interiores. Dimensiones: 80x80x160cm, material Mylar premium con reflectividad del 97%, estructura de metal y conectores reforzados. Incluye instrucciones de montaje.",
-            "amount": 179999.1,
-            "offer": 0,
-            "images": [
-                "https://http2.mlstatic.com/D_NQ_NP_601269-MLA81329158531_122024-O.webp",
-                "https://http2.mlstatic.com/D_NQ_NP_853650-MLA81061462192_122024-O.webp",
-                "https://http2.mlstatic.com/D_NQ_NP_968779-MLA81061679354_122024-O.webp"
-            ]
-        }
-    ];    
-}
+// Inicializar carrito desde localStorage
+let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
 // Renderizar productos como artículos dentro de la sección de productos
 function renderizarProductos(productos) {
@@ -95,7 +37,19 @@ function renderizarProductos(productos) {
 // Mostrar descripción ampliada dentro de la tarjeta del producto
 function mostrarDescripcion(event) {
     const idProducto = event.target.dataset.id;
+
+    // Validar que productos sea un arreglo
+    if (!Array.isArray(productos)) {
+        console.error('La lista de productos no está cargada correctamente.');
+        return;
+    }
+
     const producto = productos.find(p => p.id == idProducto);
+
+    if (!producto) {
+        console.error('Producto no encontrado.');
+        return;
+    }
 
     const card = event.target.closest('.producto');
     if (!card.querySelector('p.descripcion')) { // Evitar duplicar la descripción
@@ -106,13 +60,22 @@ function mostrarDescripcion(event) {
     }
 }
 
-// Inicializar carrito desde localStorage
-let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-
 // Función para agregar productos al carrito
 function agregarAlCarrito(event) {
     const idProducto = event.target.dataset.id;
+
+    // Validar que productos sea un arreglo
+    if (!Array.isArray(productos)) {
+        console.error('La lista de productos no está cargada correctamente.');
+        return;
+    }
+
     const producto = productos.find(p => p.id == idProducto);
+
+    if (!producto) {
+        console.error('Producto no encontrado.');
+        return;
+    }
 
     carrito.push(producto);
     localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -140,6 +103,67 @@ window.onclick = function (event) {
     }
 };
 
-// Inicializar productos y renderizarlos
-const productos = generarProductos();
-renderizarProductos(productos);
+// Función para cargar productos desde un archivo JSON
+async function cargarProductos() {
+    try {
+        const respuesta = await fetch('./productos.json'); // Ruta del archivo JSON
+        productos = await respuesta.json(); // Asignar los productos al arreglo global
+        renderizarProductos(productos); // Llamar a la función para renderizar los productos
+    } catch (error) {
+        console.error('Error al cargar los productos:', error);
+    }
+}
+
+// Llamar a cargarProductos al iniciar
+cargarProductos();
+// Función para mostrar alerta de Bootstrap
+function mostrarAlerta(mensaje) {
+    const alertContainer = document.getElementById('alert-container');
+    const alerta = document.createElement('div');
+    alerta.className = 'alert alert-success alert-dismissible fade show';
+    alerta.setAttribute('role', 'alert');
+    alerta.innerHTML = `
+        ${mensaje}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+
+    alertContainer.appendChild(alerta);
+
+    // Eliminar la alerta después de 3 segundos
+    setTimeout(() => {
+        alerta.remove();
+    }, 3000);
+}
+
+// Función para actualizar el contador del carrito
+function actualizarContadorCarrito() {
+    const cartCount = document.getElementById('cart-count');
+    cartCount.textContent = carrito.length;
+}
+
+// Función para agregar productos al carrito
+function agregarAlCarrito(event) {
+    const idProducto = event.target.dataset.id;
+
+    // Validar que productos sea un arreglo
+    if (!Array.isArray(productos)) {
+        console.error('La lista de productos no está cargada correctamente.');
+        return;
+    }
+
+    const producto = productos.find(p => p.id == idProducto);
+
+    if (!producto) {
+        console.error('Producto no encontrado.');
+        return;
+    }
+
+    carrito.push(producto);
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+
+    mostrarAlerta(`${producto.name} ha sido añadido al carrito.`);
+    actualizarContadorCarrito();
+}
+
+// Inicializar el contador del carrito al cargar la página
+document.addEventListener('DOMContentLoaded', actualizarContadorCarrito);
