@@ -1,0 +1,119 @@
+/* Reset y estilos base */
+@import url('./components/header.css');
+@import url('./components/products.css');
+@import url('./components/modal.css');
+@import url('./components/footer.css');
+@import url('./components/cart.css');
+@import url('./components/bienvenida.css');
+@import url('./components/brands.css');
+@import url('./components/contact.css');
+
+/* Reset de márgenes y padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos generales */
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #16213e 100%);
+    background-attachment: fixed;
+    font-family: "Poppins", "Euclid Circular A", sans-serif;
+    color: #d6dfed;
+    min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Efecto de partículas de fondo sutil */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(99, 42, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(44, 230, 194, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+html, body {
+    height: 100%;
+}
+
+/* Estilos generales para secciones */
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 30px;
+    padding-bottom: 80px;
+    padding-left: 60px;
+    width: 100%;
+}
+
+@media (width > 420px) {
+    section {
+        align-items: center;
+        padding-left: 0;
+        gap: 20px;
+    }
+
+    .links {
+        gap: 20px;
+    }
+    
+    .carousel-item img {
+        height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-item img {
+        height: 250px; 
+    }
+    
+    .productos-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 10px;
+    }
+    
+    .productos h3 {
+        font-size: 2rem;
+    }
+    
+    body::before {
+        opacity: 0.5;
+    }
+}
+
+/* Utilidades */
+.text-center {
+    text-align: center;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+/* Alertas */
+#alert-container {
+    z-index: 1050;
+}
+

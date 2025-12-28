@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - GGGrowShop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d0d0d 0%, #212121 100%);
+            min-height: 100vh;
+            color: #d6dfed;
+        }
+        .admin-header {
+            background: rgba(99, 42, 129, 0.3);
+            padding: 20px;
+            border-bottom: 2px solid #2CE6C2;
+            margin-bottom: 30px;
+        }
+        .admin-header h1 {
+            color: #2CE6C2;
+            margin: 0;
+        }
+        .filter-buttons {
+            margin-bottom: 20px;
+        }
+        .filter-btn {
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #d6dfed;
+        }
+        .card-header {
+            background: rgba(99, 42, 129, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #632A81 0%, #2CE6C2 100%);
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1><i class="fas fa-tachometer-alt me-2"></i>Panel de Administración</h1>
+                <div>
+                    <span class="me-3" id="user-info"></span>
+                    <a href="index.html" class="btn btn-outline-light me-2">
+                        <i class="fas fa-home me-2"></i>Inicio
+                    </a>
+                    <button class="btn btn-outline-danger" id="logout-btn">
+                        <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="alert-container" class="position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 1050;"></div>
+
+        <!-- Estadísticas -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <h3 id="total-orders">0</h3>
+                        <p class="mb-0">Total Pedidos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <h3 id="pending-orders">0</h3>
+                        <p class="mb-0">Pendientes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <h3 id="confirmed-orders">0</h3>
+                        <p class="mb-0">Confirmados</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <h3 id="ready-orders">0</h3>
+                        <p class="mb-0">Listos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filter-buttons">
+            <button class="btn btn-outline-primary filter-btn active" data-filter="all">
+                Todos
+            </button>
+            <button class="btn btn-outline-warning filter-btn" data-filter="pendiente">
+                Pendientes
+            </button>
+            <button class="btn btn-outline-info filter-btn" data-filter="confirmado">
+                Confirmados
+            </button>
+            <button class="btn btn-outline-primary filter-btn" data-filter="en_preparacion">
+                En Preparación
+            </button>
+            <button class="btn btn-outline-success filter-btn" data-filter="listo">
+                Listos
+            </button>
+            <button class="btn btn-outline-success filter-btn" data-filter="entregado">
+                Entregados
+            </button>
+            <button class="btn btn-outline-danger filter-btn" data-filter="cancelado">
+                Cancelados
+            </button>
+        </div>
+
+        <!-- Lista de Pedidos -->
+        <div id="orders-container">
+            <!-- Los pedidos se cargarán aquí -->
+        </div>
+    </div>
+
+    <script src="js/services/AuthService.js"></script>
+    <script src="js/services/OrderService.js"></script>
+    <script src="js/services/EmailService.js"></script>
+    <script src="js/services/UIService.js"></script>
+    <script src="js/components/AdminPanel.js"></script>
+    <script>
+        const authService = new AuthService();
+        const orderService = new OrderService();
+        const emailService = new EmailService();
+        const uiService = new UIService();
+
+        // Verificar autenticación y rol
+        if (!authService.requireAuth('login.html')) {
+            // Redirigirá automáticamente
+        } else if (!authService.requireRole('admin', 'index.html')) {
+            // Redirigirá automáticamente
+        } else {
+            // Mostrar información del usuario
+            const user = authService.getCurrentUser();
+            document.getElementById('user-info').textContent = `Bienvenido, ${user.name}`;
+
+            // Inicializar panel de administración
+            const adminPanel = new AdminPanel(orderService, emailService, uiService);
+            adminPanel.init();
+
+            // Actualizar estadísticas
+            function updateStats() {
+                const orders = orderService.getAllOrders();
+                document.getElementById('total-orders').textContent = orders.length;
+                document.getElementById('pending-orders').textContent = 
+                    orders.filter(o => o.status === 'pendiente').length;
+                document.getElementById('confirmed-orders').textContent = 
+                    orders.filter(o => o.status === 'confirmado').length;
+                document.getElementById('ready-orders').textContent = 
+                    orders.filter(o => o.status === 'listo').length;
+            }
+
+            updateStats();
+            window.addEventListener('ordersChanged', updateStats);
+
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                if (confirm('¿Desea cerrar sesión?')) {
+                    authService.logout();
+                    window.location.href = 'login.html';
+                }
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

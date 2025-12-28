@@ -1,0 +1,18 @@
+{
+  "name": "gggrowshop",
+  "version": "2.0.0",
+  "description": "Tienda online de grow shop",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["growshop", "tienda", "ecommerce"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}
+
+
+
+

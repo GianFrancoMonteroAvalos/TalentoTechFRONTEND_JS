@@ -1,0 +1,106 @@
+/* Estilos del Formulario de Contacto */
+.contacto {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 50px;
+    text-align: center;
+    max-width: 700px;
+    margin: 60px auto;
+    border-radius: 20px;
+    border: 1px solid rgba(44, 230, 194, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.contacto h3 {
+    background: linear-gradient(135deg, #632A81, #2CE6C2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.contacto input, 
+.contacto textarea {
+    width: 100%;
+    padding: 15px 20px;
+    margin: 15px 0;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+    color: #d6dfed;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.contacto input::placeholder,
+.contacto textarea::placeholder {
+    color: rgba(214, 223, 237, 0.6);
+}
+
+.contacto input:focus, 
+.contacto textarea:focus {
+    outline: none;
+    border-color: #2CE6C2;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 4px rgba(44, 230, 194, 0.2);
+    transform: translateY(-2px);
+}
+
+.contacto textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.contacto button {
+    background: linear-gradient(135deg, #632A81, #7d3fa3);
+    color: white;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(99, 42, 129, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.contacto button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.contacto button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.contacto button:hover {
+    background: linear-gradient(135deg, #7d3fa3, #632A81);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(99, 42, 129, 0.4);
+}
+
+.contacto button:active {
+    transform: translateY(-1px) scale(0.98);
+}
+

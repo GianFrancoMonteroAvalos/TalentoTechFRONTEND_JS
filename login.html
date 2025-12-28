@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - GGGrowShop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d0d0d 0%, #212121 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            max-width: 450px;
+            width: 100%;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .login-card h2 {
+            color: #2CE6C2;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .form-label {
+            color: #d6dfed;
+        }
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #2CE6C2;
+            color: #fff;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #632A81 0%, #2CE6C2 100%);
+            border: none;
+            padding: 12px;
+            font-weight: 500;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44, 230, 194, 0.4);
+        }
+        .demo-credentials {
+            background: rgba(44, 230, 194, 0.1);
+            border: 1px solid rgba(44, 230, 194, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .demo-credentials h6 {
+            color: #2CE6C2;
+            margin-bottom: 10px;
+        }
+        .demo-credentials p {
+            color: #d6dfed;
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h2><i class="fas fa-user-circle me-2"></i>Iniciar Sesión</h2>
+            
+            <div id="alert-container"></div>
+
+            <form id="login-form">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" 
+                           class="form-control" 
+                           id="email" 
+                           placeholder="tu@email.com" 
+                           required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" 
+                           class="form-control" 
+                           id="password" 
+                           placeholder="••••••••" 
+                           required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-3">
+                    <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                </button>
+            </form>
+
+            <div class="demo-credentials">
+                <h6><i class="fas fa-info-circle me-2"></i>Credenciales de Prueba</h6>
+                <p><strong>Administrador:</strong></p>
+                <p>Email: admin@gggrowshop.com</p>
+                <p>Contraseña: admin123</p>
+                <hr style="border-color: rgba(44, 230, 194, 0.3);">
+                <p><strong>Comprador:</strong></p>
+                <p>Email: comprador@gggrowshop.com</p>
+                <p>Contraseña: comprador123</p>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="index.html" class="text-decoration-none" style="color: #2CE6C2;">
+                    <i class="fas fa-arrow-left me-2"></i>Volver al inicio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/services/AuthService.js"></script>
+    <script src="js/services/UIService.js"></script>
+    <script>
+        const authService = new AuthService();
+        const uiService = new UIService();
+
+        // Si ya está autenticado, redirigir según su rol
+        if (authService.isAuthenticated()) {
+            if (authService.isAdmin()) {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const result = authService.login(email, password);
+
+            if (result.success) {
+                uiService.showAlert(result.message, 'success');
+                
+                setTimeout(() => {
+                    if (result.user.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }, 1000);
+            } else {
+                uiService.showAlert(result.message, 'danger');
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

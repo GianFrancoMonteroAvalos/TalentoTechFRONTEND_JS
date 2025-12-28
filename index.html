@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GGGrowShop</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/383143111/original/5342a1ce62dbfa4d0fe2dd14ffff87f7c425d9dd/8-grow-shop-weed-marijuana-logo-for-your-business.jpg" type="image/jpeg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,7 +20,23 @@
         <p id="scrolling-text">HASTA 3 Y 6 CUOTAS SIN INTERÉS. ENVÍOS A TODO EL PAÍS.</p>
     </div>
     <h1>GGGrowShop</h1>
-    <div class="cart-icon position-absolute top-0 end-0 p-4">
+    <div class="cart-icon position-absolute top-0 end-0 p-4 d-flex align-items-center gap-3">
+        <div id="user-menu" style="display: none;">
+            <div class="dropdown">
+                <button class="btn btn-link text-white dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle" style="font-size: 24px;"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="seguimiento.html"><i class="fas fa-shipping-fast me-2"></i>Seguimiento</a></li>
+                    <li id="admin-link-item" style="display: none;"><a class="dropdown-item" href="admin.html"><i class="fas fa-tachometer-alt me-2"></i>Administración</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" id="logout-link"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+        <a href="#" id="login-link" class="text-white text-decoration-none">
+            <i class="fas fa-sign-in-alt" style="font-size: 24px;"></i>
+        </a>
         <a href="carrito.html" class="position-relative">
             <img src="https://img.icons8.com/?size=100&id=Ot2P5D5MPltM&format=png&color=FFFFFF" alt="Carrito" style="width: 40px; height: 40px;">
             <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
@@ -104,15 +120,6 @@
         <!-- Los productos se generarán dinámicamente con JavaScript -->
     </div>
 </section>
-
-<!-- Modal -->
-<div id="modalDescripcion" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="cerrarModal()">&times;</span>
-        <h2 id="modalTitulo">Título del Producto</h2>
-        <p id="modalTexto">Descripción del Producto</p>
-    </div>
-</div>
 
 <!-- Modal -->
 <div id="modalDescripcion" class="modal">
@@ -300,9 +307,46 @@
         </div>
         </div>
     </footer>
-    <script src="script.js" defer></script>
+    <!-- Scripts modulares -->
+    <script src="js/services/ProductService.js"></script>
+    <script src="js/services/CartService.js"></script>
+    <script src="js/services/UIService.js"></script>
+    <script src="js/components/ProductCard.js"></script>
+    <script src="js/components/ProductGrid.js"></script>
+    <script src="js/app.js"></script>
 
+    <script src="js/services/AuthService.js"></script>
+    <script>
+        // Actualizar menú de usuario según autenticación
+        document.addEventListener('DOMContentLoaded', () => {
+            const authService = new AuthService();
+            const userMenu = document.getElementById('user-menu');
+            const loginLink = document.getElementById('login-link');
+            const adminLinkItem = document.getElementById('admin-link-item');
+            const logoutLink = document.getElementById('logout-link');
+
+            if (authService.isAuthenticated()) {
+                userMenu.style.display = 'block';
+                loginLink.style.display = 'none';
+                
+                if (authService.isAdmin()) {
+                    adminLinkItem.style.display = 'block';
+                }
+
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (confirm('¿Desea cerrar sesión?')) {
+                        authService.logout();
+                        window.location.reload();
+                    }
+                });
+            } else {
+                userMenu.style.display = 'none';
+                loginLink.href = 'login.html';
+            }
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
 </html>

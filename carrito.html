@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GGGrowShop</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/383143111/original/5342a1ce62dbfa4d0fe2dd14ffff87f7c425d9dd/8-grow-shop-weed-marijuana-logo-for-your-business.jpg" type="image/jpeg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,7 +23,23 @@
         <h1>GGGrowShop</h1>
     </a>
     
-    <div class="cart-icon position-absolute top-0 end-0 p-4">
+    <div class="cart-icon position-absolute top-0 end-0 p-4 d-flex align-items-center gap-3">
+        <div id="user-menu" style="display: none;">
+            <div class="dropdown">
+                <button class="btn btn-link text-white dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle" style="font-size: 24px;"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="seguimiento.html"><i class="fas fa-shipping-fast me-2"></i>Seguimiento</a></li>
+                    <li id="admin-link-item" style="display: none;"><a class="dropdown-item" href="admin.html"><i class="fas fa-tachometer-alt me-2"></i>Administración</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" id="logout-link"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+        <a href="#" id="login-link" class="text-white text-decoration-none">
+            <i class="fas fa-sign-in-alt" style="font-size: 24px;"></i>
+        </a>
         <a href="carrito.html" class="position-relative">
             <img src="https://img.icons8.com/?size=100&id=Ot2P5D5MPltM&format=png&color=FFFFFF" alt="Carrito" style="width: 40px; height: 40px;">
             <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
@@ -64,11 +80,63 @@
     <div id="total-price">
         <h4>Total: $<span id="total-amount">0</span></h4>
     </div>
+
+    <!-- Formulario de Checkout -->
+    <div id="checkout-section" class="mt-4" style="display: none;">
+        <div class="card" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+            <div class="card-header" style="background: rgba(99, 42, 129, 0.2);">
+                <h4 class="mb-0" style="color: #2CE6C2;">Finalizar Compra</h4>
+            </div>
+            <div class="card-body">
+                <form id="checkout-form">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="customer-name" class="form-label" style="color: #d6dfed;">Nombre Completo *</label>
+                            <input type="text" class="form-control" id="customer-name" required 
+                                   style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="customer-email" class="form-label" style="color: #d6dfed;">Email *</label>
+                            <input type="email" class="form-control" id="customer-email" required
+                                   style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="customer-phone" class="form-label" style="color: #d6dfed;">Número de Celular *</label>
+                            <input type="tel" class="form-control" id="customer-phone" required
+                                   placeholder="+54 9 11 1234-5678"
+                                   style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
+                            <small class="form-text" style="color: #d6dfed; opacity: 0.7;">Necesario para coordinar el envío</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="customer-address" class="form-label" style="color: #d6dfed;">Dirección (Opcional)</label>
+                            <input type="text" class="form-control" id="customer-address"
+                                   placeholder="Calle, número, ciudad"
+                                   style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="shipping-address" class="form-label" style="color: #d6dfed;">Dirección de Retiro (Opcional)</label>
+                        <textarea class="form-control" id="shipping-address" rows="2"
+                                  style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;"
+                                  placeholder="Ej: GGGrowShop / av mosconi 338, Lomas del Mirador, Buenos Aires - Atencion de Lun. a Vie. 8 a 16 hs"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="order-notes" class="form-label" style="color: #d6dfed;">Notas del Pedido (Opcional)</label>
+                        <textarea class="form-control" id="order-notes" rows="2"
+                                  style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;"
+                                  placeholder="Instrucciones especiales o comentarios"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" 
+                            style="background: linear-gradient(135deg, #632A81 0%, #2CE6C2 100%); border: none; padding: 12px;">
+                        <i class="fas fa-shopping-cart me-2"></i>Confirmar Pedido
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </section>
-<!-- Contador del carrito en el ícono -->
-<div id="cart-icon">
-    Carrito <span id="cart-count">0</span> productos
-</div>
 
 
     <!-- Formulario de Contacto -->
@@ -162,9 +230,173 @@
         </div>
         </div>
     </footer>
-    <script src="carrito.js" defer></script>
+    <!-- Scripts modulares -->
+    <!-- Cargar configuración de email si existe (opcional) -->
+    <script src="js/config/email-config.js" onerror="console.log('Configuración de email no encontrada, usando valores por defecto')"></script>
+    <script src="js/services/ProductService.js"></script>
+    <script src="js/services/CartService.js"></script>
+    <script src="js/services/OrderService.js"></script>
+    <script src="js/services/EmailService.js"></script>
+    <script src="js/services/OwnerEmailService.js"></script>
+    <script src="js/services/AuthService.js"></script>
+    <script src="js/services/UIService.js"></script>
+    <script src="js/components/CartTable.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Funcionalidad de checkout
+        document.addEventListener('DOMContentLoaded', () => {
+            const cartService = window.app?.cartService || new CartService();
+            const orderService = new OrderService();
+            const emailService = new EmailService();
+            const uiService = window.app?.uiService || new UIService();
 
+            // Mostrar/ocultar formulario de checkout según el carrito
+            function updateCheckoutVisibility() {
+                const checkoutSection = document.getElementById('checkout-section');
+                const cart = cartService.getCart();
+                
+                if (cart.length > 0) {
+                    checkoutSection.style.display = 'block';
+                } else {
+                    checkoutSection.style.display = 'none';
+                }
+            }
+
+            // Escuchar cambios en el carrito
+            window.addEventListener('cartChanged', updateCheckoutVisibility);
+            updateCheckoutVisibility();
+
+            // Manejar envío del formulario de checkout
+            document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const cart = cartService.getCart();
+                if (cart.length === 0) {
+                    uiService.showAlert('El carrito está vacío', 'warning');
+                    return;
+                }
+
+                const customerName = document.getElementById('customer-name').value.trim();
+                const customerEmail = document.getElementById('customer-email').value.trim();
+                const customerPhone = document.getElementById('customer-phone').value.trim();
+                const customerAddress = document.getElementById('customer-address').value.trim();
+                const shippingAddress = document.getElementById('shipping-address').value.trim();
+                const notes = document.getElementById('order-notes').value.trim();
+
+                // Validar campos requeridos
+                if (!customerName || !customerEmail || !customerPhone) {
+                    uiService.showAlert('Por favor completa todos los campos requeridos (Nombre, Email y Teléfono)', 'warning');
+                    return;
+                }
+
+                // Calcular totales
+                const subtotal = cartService.getTotal();
+                const shippingCost = 0; // Envío gratis
+                const total = subtotal + shippingCost;
+
+                // Verificar si el usuario está autenticado
+                const authService = new AuthService();
+                const isAuthenticated = authService.isAuthenticated();
+
+                // Crear pedido
+                const order = orderService.createOrder({
+                    name: customerName,
+                    email: customerEmail,
+                    phone: customerPhone,
+                    address: customerAddress,
+                    items: cart,
+                    subtotal: subtotal,
+                    shippingCost: shippingCost,
+                    total: total,
+                    shippingAddress: shippingAddress || 'GGGrowShop / av mosconi 338, Lomas del Mirador, Buenos Aires - Atencion de Lun. a Vie. 8 a 16 hs',
+                    notes: notes
+                });
+
+                // Si el usuario NO está autenticado, enviar email al dueño
+                if (!isAuthenticated) {
+                    uiService.showAlert('Procesando tu pedido...', 'info');
+                    
+                    const ownerEmailService = new OwnerEmailService();
+                    
+                    // Preparar datos para el dueño
+                    const orderDataForOwner = {
+                        orderNumber: order.orderNumber,
+                        customerName: customerName,
+                        customerEmail: customerEmail,
+                        customerPhone: customerPhone,
+                        customerAddress: customerAddress || 'No especificada',
+                        items: cart,
+                        subtotal: subtotal,
+                        shippingCost: shippingCost,
+                        total: total,
+                        shippingAddress: shippingAddress || 'GGGrowShop / av mosconi 338, Lomas del Mirador, Buenos Aires - Atencion de Lun. a Vie. 8 a 16 hs',
+                        notes: notes
+                    };
+
+                    // Enviar email al dueño
+                    try {
+                        const emailResult = await ownerEmailService.sendOrderToOwner(orderDataForOwner);
+                        
+                        if (emailResult.success) {
+                            uiService.showAlert(`¡Pedido enviado exitosamente! Número: ${order.orderNumber}. Te contactaremos pronto.`, 'success');
+                        } else {
+                            // Aún así mostrar éxito, el pedido está guardado
+                            uiService.showAlert(`¡Pedido registrado! Número: ${order.orderNumber}. Te contactaremos pronto.`, 'success');
+                        }
+                    } catch (error) {
+                        console.error('Error al enviar email al dueño:', error);
+                        // Aún así mostrar éxito, el pedido está guardado
+                        uiService.showAlert(`¡Pedido registrado! Número: ${order.orderNumber}. Te contactaremos pronto.`, 'success');
+                    }
+                } else {
+                    // Usuario autenticado - enviar email de confirmación normal
+                    await emailService.sendOrderConfirmation(order);
+                    uiService.showAlert(`¡Pedido creado exitosamente! Número de pedido: ${order.orderNumber}. Revisa tu email.`, 'success');
+                }
+
+                // Limpiar carrito
+                cartService.clearCart();
+
+                // Redirigir a seguimiento después de 2 segundos
+                setTimeout(() => {
+                    window.location.href = `seguimiento.html?order=${order.orderNumber}`;
+                }, 2000);
+            });
+        });
+    </script>
+
+    <script src="js/services/AuthService.js"></script>
+    <script>
+        // Actualizar menú de usuario según autenticación
+        document.addEventListener('DOMContentLoaded', () => {
+            const authService = new AuthService();
+            const userMenu = document.getElementById('user-menu');
+            const loginLink = document.getElementById('login-link');
+            const adminLinkItem = document.getElementById('admin-link-item');
+            const logoutLink = document.getElementById('logout-link');
+
+            if (authService.isAuthenticated()) {
+                userMenu.style.display = 'block';
+                loginLink.style.display = 'none';
+                
+                if (authService.isAdmin()) {
+                    adminLinkItem.style.display = 'block';
+                }
+
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (confirm('¿Desea cerrar sesión?')) {
+                        authService.logout();
+                        window.location.reload();
+                    }
+                });
+            } else {
+                userMenu.style.display = 'none';
+                loginLink.href = 'login.html';
+            }
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
 </html>
